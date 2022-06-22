@@ -9,10 +9,12 @@ from selenium.webdriver.support import expected_conditions as EC
 option = webdriver.ChromeOptions()
 option.add_argument('--no-sandbox')
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.get("https://www.google.com")
-# driver = webdriver.Chrome('C:\PythonProjs\chromedriver.exe', options=option)
 
-driver.get('https://www.imdb.com/chart/top/')
+# driver.get("https://www.google.com")
+# driver = webdriver.Chrome('C:\PythonProjs\chromedriver.exe', options=option)
+# driver.get('https://www.imdb.com/chart/top/')
+
+driver.get("https://www.imdb.com/chart/top/")  # get page HTML through request
 soup = BeautifulSoup(driver.page_source, 'html.parser')  # parse content using beautifulsoup
 
 totalScrapedInfo = []  # list will save all the scraped information
