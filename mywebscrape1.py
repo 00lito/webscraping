@@ -5,9 +5,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 option = webdriver.ChromeOptions()
 option.add_argument('--no-sandbox')
-
-
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
 driver.get("https://www.imdb.com/chart/top/")  # get page HTML through request
 soup = BeautifulSoup(driver.page_source, 'html.parser')  # parse content using beautifulsoup
 
