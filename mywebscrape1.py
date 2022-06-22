@@ -1,3 +1,5 @@
+import csv
+import json
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -25,7 +27,7 @@ for anchor in first10:
     # Find the first element with class ‘ipc-inline-list’
     # old way: infolist = driver.find_element_by_css_selector('.ipc-inline-list')[0]
     # new way
-    infolists = driver.find_elements(By.CSS_SELECTOR, ".ipc-inline-list.ipc-inline-list")[0]
+    infolists = driver.find_elements(By.CSS_SELECTOR, "[data-testid='hero-title-block__metadata']")[0]
     # Find all elements with role=’presentation’ from the first element with class ‘ipc-inline-list’
     informations = infolists.find_elements(By.CSS_SELECTOR, "[role='presentation']")
     scrapedInfo = {
@@ -36,10 +38,16 @@ for anchor in first10:
     }  # save scraped information in a dictionary
     WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-testid='firstListCardGroup-editorial']")))
     listElements = driver.find_elements(By.CSS_SELECTOR, "[data-testid='firstListCardGroup-editorial'] .listName") # Extracting the editorial lists elements)
-    listNames = [] # creating empty list and then appending only the elements texts
+    listNames = []  # creating empty list and then appending only the elements texts
     for el in listElements:
         listNames.append(el.text)
-    scrapedInfo['editorial-list'] = listNames # adding the editoral list names to our scapedInfo dictionary
+    scrapedInfo['editorial-list'] = listNames  # adding the editorial list names to our scrapedInfo dictionary
     totalScrapedInfo.append(scrapedInfo)  # append dictionary to the totalScrapedInformation
-
     print(totalScrapedInfo)  # display the innerText of each anchor
+
+    file = open('movies.json', mode='w', encoding='utf-8')
+    file.write(json.dumps(totalScrapedInfo))
+
+    writer = csv.writer(open("top10moviesalltime.csv", 'w'))
+    for movie in totalScrapedInfo:
+        writer.writerow(movie.values())
